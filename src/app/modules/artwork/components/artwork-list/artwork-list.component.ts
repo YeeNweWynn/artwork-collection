@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs'
+import { HttpParams } from '@angular/common/http';
+import { FormBuilder } from "@angular/forms";
+
 import { ArtworkService } from '../../services/artwork.service';
 import { Artwork, DropdownOption } from '../../models/artwork';
 
@@ -10,7 +13,7 @@ import { Artwork, DropdownOption } from '../../models/artwork';
 })
 export class ArtworkListComponent implements OnInit {
 
-  artworks!: Observable<Artwork[]>;
+  artworks: Artwork[] = [];  
   filteredArtwork!: Observable<Artwork[]>;
   sortOption: DropdownOption[] = [
     {key: '', value: 'Recommendation'}, 
@@ -20,17 +23,25 @@ export class ArtworkListComponent implements OnInit {
   ]
 
   page: number = 1;
+  perPage: number = 8;
 
   constructor(
     private artWorkService: ArtworkService,
   ) { }
 
   ngOnInit(): void {
-    this.getArtWorks();
+     this.getArtWorks();
   }
 
-  private getArtWorks(){
-    
+  getArtWorks() {
+    let params = new HttpParams();
+    params = params.append('page', this.page);
+    params = params.append('limit', this.perPage);
+    this.artWorkService.getArtWorks(this.page).subscribe((res)=>{
+      this.artworks = res.data;
+      console.log(res.data)
+    })
+      
   }
 
 }

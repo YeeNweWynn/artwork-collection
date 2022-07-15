@@ -1,26 +1,47 @@
-<div class="wrapper">  
+<div class="wrapper" *ngIf="loading">  
 
     <div nxLayout="grid" class="nx-margin-y-m">  
         <div nxRow >    
-            <div nxCol="12,12,6,4,3">
+            <div nxCol="12,12,6,4" *ngFor="let artwork of artworks">
                 <nx-card class="nx-margin-y-s">
-                                       
-                    <h3>Title</h3>
-                    <h4>Artis Title</h4>
-                    <p>1870</p>
-                    <p>Oil on canvas</p>
+                  <figure nxFigure>       
+                    <img 
+                      *ngIf="artwork.image_id; else showPlaceHolder"
+                      class="image" 
+                      src="assets/logos/Art_Institute_of_Chicago_logo.svg" 
+                      [title]="artwork.title"
+                      [alt]="artwork.title" />
+                      <ng-template #showPlaceHolder>
+                        <img                 
+                          class="image" 
+                          src="assets/logos/Art_Institute_of_Chicago_logo.svg" 
+                          title="Art_Institute_of_Chicago_logo"
+                          alt="Art_Institute_of_Chicago_logo" />
+                      </ng-template>   
+                    </figure>
+
+                    <h3>{{artwork.title}}</h3>
+                    <h4>{{artwork.artist_title}}</h4>
+                    <p *ngIf="!artwork.date_start && !artwork.date_end; else showDate">{{artwork.place_of_origin}}</p>
+                    <ng-template #showDate>
+                        <p *ngIf="artwork.date_start == artwork.date_end; else showAll">{{artwork.place_of_origin}}({{artwork.date_start}})</p>
+                        <ng-template #showAll>
+                          <p>{{artwork.place_of_origin}} ({{artwork.date_start}} {{artwork.date_end}})</p>
+                        </ng-template>
+                    </ng-template>
+                    <p>{{artwork.medium_display}}</p>
                 </nx-card>
             </div>        
         </div>
     </div>    
-  </div>
+</div>
   
-  <ng-template #loading>
-    <div nxLayout="grid" class="nx-margin-y-m">
-      <div nxRow>
-        <div nxCol="1" nxColOffset="6">
-          <nx-spinner nxSize="large"></nx-spinner>
-        </div>
+<ng-template #loading>
+  <div nxLayout="grid" class="nx-margin-y-m">
+    <div nxRow>
+      <div nxCol="1" nxColOffset="6">
+        <nx-spinner nxSize="large"></nx-spinner>
       </div>
     </div>
-  </ng-template>
+  </div>
+</ng-template>

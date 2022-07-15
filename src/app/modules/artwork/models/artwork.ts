@@ -4,6 +4,7 @@ export interface Artwork {
     title: string;
     artist_title: string;
     place_of_origin: string;
+    medium_display: string;
     date_start: number;
     date_end: number;
 }
