@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ArtworkListComponent } from './components/artwork-list/artwork-list.component';
+import { ArtworkWrapperComponent } from './components/artwork-wrapper/artwork-wrapper.component';
 
-const routes: Routes = [{ path: '', component: ArtworkListComponent}];
+const routes: Routes = [{ path: '', component: ArtworkWrapperComponent}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

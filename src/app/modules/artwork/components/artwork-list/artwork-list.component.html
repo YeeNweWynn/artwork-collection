@@ -1,3 +1,26 @@
+<div class="wrapper">  
 
-<p>artwork-list works!</p>
-<app-header></app-header>
+    <div nxLayout="grid" class="nx-margin-y-m">  
+        <div nxRow >    
+            <div nxCol="12,12,6,4,3">
+                <nx-card class="nx-margin-y-s">
+                                       
+                    <h3>Title</h3>
+                    <h4>Artis Title</h4>
+                    <p>1870</p>
+                    <p>Oil on canvas</p>
+                </nx-card>
+            </div>        
+        </div>
+    </div>    
+  </div>
+  
+  <ng-template #loading>
+    <div nxLayout="grid" class="nx-margin-y-m">
+      <div nxRow>
+        <div nxCol="1" nxColOffset="6">
+          <nx-spinner nxSize="large"></nx-spinner>
+        </div>
+      </div>
+    </div>
+  </ng-template>
