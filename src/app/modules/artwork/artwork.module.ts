@@ -1,8 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { NxSpinnerModule } from '@aposin/ng-aquila/spinner';
+import { NxGridModule } from '@aposin/ng-aquila/grid';
+
 import { NxCardModule } from '@aposin/ng-aquila/card';
+import { NxFormfieldModule } from '@aposin/ng-aquila/formfield';
+import { NxDropdownModule } from '@aposin/ng-aquila/dropdown';
 
 import { ArtworkRoutingModule } from './artwork-routing.module';
 import { ArtworkListComponent } from './components/artwork-list/artwork-list.component';
@@ -18,8 +24,13 @@ import { ArtworkWrapperComponent } from './components/artwork-wrapper/artwork-wr
     CommonModule,
     ArtworkRoutingModule,
     SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
     NxSpinnerModule,
-    NxCardModule
+    NxGridModule,
+    NxCardModule,
+    NxFormfieldModule,
+    NxDropdownModule
   ]
 })
 export class ArtworkModule { }

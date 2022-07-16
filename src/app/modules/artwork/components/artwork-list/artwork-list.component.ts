@@ -4,7 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { FormBuilder } from "@angular/forms";
 
 import { ArtworkService } from '../../services/artwork.service';
-import { Artwork, DropdownOption } from '../../models/artwork';
+import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwork';
 
 @Component({
   selector: 'app-artwork-list',
@@ -21,16 +21,30 @@ export class ArtworkListComponent implements OnInit {
     {key: 'artist_title', value: 'Artist'}, 
     {key: 'date_start', value: 'Date'}
   ]
+  FilterArtworkOption: FilterArtworkOption[] = []
+
+  filterForm = this.fb.group({
+    filterArtwork: ''
+  });
 
   page: number = 1;
   perPage: number = 8;
 
   constructor(
     private artWorkService: ArtworkService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
-     this.getArtWorks();
+    this.getArtWorks();
+  }
+
+  selectLabel(option: FilterArtworkOption): string {
+    return `${option.title} (${option.count})`;
+  }
+
+  selectValue(option: FilterArtworkOption): number {
+    return option.id;
   }
 
   getArtWorks() {

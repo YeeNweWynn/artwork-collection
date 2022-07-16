@@ -13,3 +13,10 @@ export interface DropdownOption {
     key: string;
     value: string;
 }
+
+export interface FilterArtworkOption {
+    id: number;
+    title: number;
+    count: number;
+    
+}
