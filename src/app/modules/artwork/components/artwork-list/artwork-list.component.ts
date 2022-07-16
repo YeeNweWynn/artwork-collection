@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs'
 import { HttpParams } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { filter } from 'rxjs/operators';
 
 import { ArtworkService } from '../../services/artwork.service';
 import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwork';
@@ -13,9 +14,8 @@ import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwo
   styleUrls: ['./artwork-list.component.scss']
 })
 export class ArtworkListComponent implements OnInit {
-
-  artworks?: Observable<Artwork[]>;
-  filteredArtwork?: Observable<Artwork[]>;
+  artworks: Artwork[] = [];
+  tempArtworks: Artwork[] = [];
   sortOption: DropdownOption[] = [
     {key: 'title', value: 'Name'}, 
     {key: 'artist_title', value: 'Artist'}, 
@@ -27,6 +27,7 @@ export class ArtworkListComponent implements OnInit {
     sortArtwork: [''],
   })
  
+  isLoading:boolean = false;
   imageUrl: string = '';
   count: number = 210;
   page: number = 1;
@@ -39,7 +40,7 @@ export class ArtworkListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getArtWorks();
-    this.filterAndSortArtwork();   
+    this.onFilterChangesListner(); 
   }
 
   get form() {
@@ -54,32 +55,41 @@ export class ArtworkListComponent implements OnInit {
     return option.title;
   }
 
-  onChangeFilter() {
-    console.log('change filter',  this.form['filterArtwork'].value)
+  onFilterChangesListner(): void {
+    this.form['filterArtwork'].valueChanges.subscribe((filterArr) => {
+      if (filterArr.length) {
+        this.artworks = this.tempArtworks.filter((artwork) => {
+          return filterArr.some((f: string) => {
+            return artwork.style_titles.includes(f);
+          });
+        });
+      }else {
+        this.artworks = this.tempArtworks;
+      }
+    });
   }
 
-  onChangeSorting() {
-    console.log('change sorting', this.form['sortArtwork'].value);
+  onChangeSorting(sortKey: string) {
+    console.log('change sorting', sortKey);
   }
 
   getArtWorks() {
-    let params = new HttpParams();
-    params = params.append('page', this.page);
-    params = params.append('limit', this.perPage);
-    this.artworks = this.artWorkService.getArtWorks(params).pipe(
-      map(res => {
-        this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
-        //console.log('filterOption', this.FilterArtworkOption)
-        this.imageUrl = res.config.iiif_url;
-        this.page = res.pagination.current_page;
-        this.perPage = res.pagination.limit;
-        this.count = res.pagination.total_pages;
-        return res.data;
-      }),
-      catchError(err => {
-        return of ([]);
-      })
-    )
+    const params = {
+      page: this.page,
+      limit: this.perPage,
+    };
+    this.isLoading = true;
+    this.artWorkService.getArtWorks(params).subscribe((res: any) => {
+      this.isLoading = false;
+      this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
+      //console.log('filterOption', this.FilterArtworkOption)
+      this.imageUrl = res.config.iiif_url;
+      this.page = res.pagination.current_page;
+      this.perPage = res.pagination.limit;
+      this.count = res.pagination.total_pages;
+      this.artworks = res.data;
+      this.tempArtworks = res.data;
+    });
   }
 
   filterArtworkOptionData(data: Artwork[]): FilterArtworkOption[] {
@@ -102,10 +112,6 @@ export class ArtworkListComponent implements OnInit {
       }
     })
     return filterArr;
-  }
-
-  filterAndSortArtwork() {
-   
   }
 
   prevPage() {

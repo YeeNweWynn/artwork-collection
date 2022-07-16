@@ -1,4 +1,4 @@
-<div *ngIf="(artworks | async); else loading">  
+<div *ngIf="!isLoading; else loading">  
   <form [formGroup]="filterForm"  >
     <div nxLayout="grid" class="nx-margin-y-m">
       <div nxRow>
@@ -11,7 +11,6 @@
                 [selectLabel]="selectLabel"
                 [selectValue]="selectValue"
                 formControlName="filterArtwork"
-                (click)="onChangeFilter()"
             ></nx-multi-select>
           </nx-formfield>
         </div>
@@ -20,12 +19,12 @@
             <nx-dropdown formControlName="sortArtwork" >
                 <nx-dropdown-item
                   nxValue=""
-                  (click)="onChangeSorting()"
+                  (click)="onChangeSorting('')"
                 >Recommendation</nx-dropdown-item>
                 <nx-dropdown-item 
                   *ngFor="let sort of sortOption"
                   nxValue="{{sort.key}}"
-                  (click)="onChangeSorting()">{{sort.value}}
+                  (click)="onChangeSorting(sort.value)">{{sort.value}}
                 </nx-dropdown-item>
             </nx-dropdown>
          </nx-formfield>
@@ -36,7 +35,7 @@
 
   <div nxLayout="grid" class="nx-margin-y-m">  
       <div nxRow >    
-          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks | async">
+          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks">
               <nx-card class="nx-margin-y-s">
                 <figure nxFigure>       
                   <img 
