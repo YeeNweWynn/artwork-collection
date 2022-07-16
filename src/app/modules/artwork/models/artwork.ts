@@ -1,4 +1,5 @@
 export interface Artwork {
+    style_titles: string[];
     id: number;
     image_id: string;
     title: string;
@@ -15,8 +16,7 @@ export interface DropdownOption {
 }
 
 export interface FilterArtworkOption {
-    id: number;
-    title: number;
+    title: string;
     count: number;
     
 }

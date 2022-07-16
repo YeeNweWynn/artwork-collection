@@ -38,6 +38,7 @@ export class ArtworkListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getArtWorks();
+    this.filterAndSortArtwork();
   }
 
   get form() {
@@ -48,8 +49,8 @@ export class ArtworkListComponent implements OnInit {
     return `${option.title} (${option.count})`;
   }
 
-  selectValue(option: FilterArtworkOption): number {
-    return option.id;
+  selectValue(option: FilterArtworkOption): string {
+    return option.title;
   }
 
   onChangeFilter() {
@@ -66,13 +67,46 @@ export class ArtworkListComponent implements OnInit {
     params = params.append('limit', this.perPage);
     this.artworks = this.artWorkService.getArtWorks(params).pipe(
       map(res => {
+        this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
         return res.data;
       }),
       catchError(err => {
         return of ([]);
       })
     )
-      
+
+    console.log('data', this.artworks);
+  }
+
+  filterArtworkOptionData(data: Artwork[]): FilterArtworkOption[] {
+    const filterArr: FilterArtworkOption[] = []
+    data.forEach((data: Artwork) => {
+      // length = data.filter(function(item){
+      //   return item.style_titles;
+      // }).length;
+
+      if (data.style_titles) {
+        data.style_titles.forEach((val: string) => {
+          const index = filterArr.findIndex(x => x.title == val)
+          if(index > 1){
+            filterArr[index].count++;
+          }
+          else{
+            filterArr.push({
+              count: 1, 
+              title: val
+            })
+          }
+        }) 
+      }
+
+    })
+    console.log('filterArr', filterArr)
+    return filterArr;
+  }
+
+  filterAndSortArtwork() {
+   
   }
 
 }
