@@ -3,23 +3,34 @@
     <div nxLayout="grid">
       <div nxRow>
         <div nxCol="12, 12, 6">
-          <nx-formfield nxLabel="Fruits">
+          <nx-formfield nxLabel="Filter:">
             <nx-multi-select
-                placeholder="Choose options"
+                placeholder="Style"
                 [options]="FilterArtworkOption"
                 [selectLabel]="selectLabel"
                 [selectValue]="selectValue"
                 formControlName="filterArtwork"
+                (selectionChange)="onChangeFilter()"
             ></nx-multi-select>
           </nx-formfield>
+        </div>
+        <div nxCol="12, 12, 6">
+          <nx-formfield nxLabel="Sort By:">
+            <nx-dropdown formControlName="sortArtwork" >
+                <nx-dropdown-item 
+                  *ngFor="let sort of sortOption"
+                  nxValue="{{sort.value}}"
+                  (selectionChange)="onChangeSorting()">
+                </nx-dropdown-item>
+            </nx-dropdown>
+         </nx-formfield>
         </div>
       </div>
     </div>
   </form>
-
   <div nxLayout="grid" class="nx-margin-y-m">  
       <div nxRow >    
-          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks">
+          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks | async;">
               <nx-card class="nx-margin-y-s">
                 <figure nxFigure>       
                   <img 

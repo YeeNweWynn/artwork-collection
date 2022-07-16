@@ -13,7 +13,7 @@ import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwo
 })
 export class ArtworkListComponent implements OnInit {
 
-  artworks: Artwork[] = [];  
+  artworks?: Observable<Artwork[]>;
   filteredArtwork!: Observable<Artwork[]>;
   sortOption: DropdownOption[] = [
     {key: '', value: 'Recommendation'}, 
@@ -24,7 +24,8 @@ export class ArtworkListComponent implements OnInit {
   FilterArtworkOption: FilterArtworkOption[] = []
 
   filterForm = this.fb.group({
-    filterArtwork: ''
+    filterArtwork: '',
+    sortArtwork: ''
   });
 
   page: number = 1;
@@ -39,6 +40,10 @@ export class ArtworkListComponent implements OnInit {
     this.getArtWorks();
   }
 
+  get form() {
+    return this.filterForm.controls;
+  }
+
   selectLabel(option: FilterArtworkOption): string {
     return `${option.title} (${option.count})`;
   }
@@ -47,14 +52,26 @@ export class ArtworkListComponent implements OnInit {
     return option.id;
   }
 
+  onChangeFilter() {
+    console.log('change filter', this.form)
+  }
+
+  onChangeSorting() {
+    console.log('change sorting', this.form)
+  }
+
   getArtWorks() {
     let params = new HttpParams();
     params = params.append('page', this.page);
     params = params.append('limit', this.perPage);
-    this.artWorkService.getArtWorks(this.page).subscribe((res)=>{
-      this.artworks = res.data;
-      console.log(res.data)
-    })
+    this.artworks = this.artWorkService.getArtWorks(params).pipe(
+      map(res => {
+        return res.data;
+      }),
+      catchError(err => {
+        return of ([]);
+      })
+    )
       
   }
 

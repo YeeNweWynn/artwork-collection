@@ -13,7 +13,6 @@ export class ArtworkService {
   constructor( private httpClient: HttpClient) { }
 
   getArtWorks(params: any): Observable<any> {
-   
     return this.httpClient.get(`${ this.BASE_URL }`,{ params })
   }
 }
