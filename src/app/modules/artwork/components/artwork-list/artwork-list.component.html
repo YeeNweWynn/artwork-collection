@@ -29,6 +29,7 @@
       </div>
     </div>
   </form>
+
   <div nxLayout="grid" class="nx-margin-y-m">  
       <div nxRow >    
           <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks | async;">
@@ -63,8 +64,8 @@
           </div>        
       </div>
   </div>
-  
-  <div nxLayout="grid" class="nx-margin-y-m align-center">
+</div>
+  <div nxLayout="grid" class="nx-margin-y-m">
     <div nxRow>
       <div nxCol="4" nxColOffset="4">
         <nx-pagination
@@ -80,7 +81,6 @@
       </div>
     </div>
   </div>
-</div>
   
 <ng-template #loading>
   <div nxLayout="grid" class="nx-margin-y-m">

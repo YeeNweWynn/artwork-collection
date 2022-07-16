@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs'
 import { HttpParams } from '@angular/common/http';
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { ArtworkService } from '../../services/artwork.service';
 import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwork';
@@ -14,7 +14,7 @@ import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwo
 export class ArtworkListComponent implements OnInit {
 
   artworks?: Observable<Artwork[]>;
-  filteredArtwork!: Observable<Artwork[]>;
+  filteredArtwork?: Observable<Artwork[]>;
   sortOption: DropdownOption[] = [
     {key: '', value: 'Recommendation'}, 
     {key: 'title', value: 'Name'}, 
@@ -22,11 +22,9 @@ export class ArtworkListComponent implements OnInit {
     {key: 'date_start', value: 'Date'}
   ]
   FilterArtworkOption: FilterArtworkOption[] = []
+  filterForm!:FormGroup;
 
-  filterForm = this.fb.group({
-    filterArtwork: '',
-    sortArtwork: ''
-  });
+ 
   imageUrl: string = '';
   count: number = 210;
   page: number = 1;
@@ -38,6 +36,10 @@ export class ArtworkListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.filterForm= this.fb.group({
+      filterArtwork: '',
+      sortArtwork: ''
+    });
     this.getArtWorks();
     this.filterAndSortArtwork();
   }
@@ -71,6 +73,9 @@ export class ArtworkListComponent implements OnInit {
         this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
         console.log('filterOption', this.FilterArtworkOption)
         this.imageUrl = res.config.iiif_url;
+        this.page = res.pagination.current_page;
+        this.perPage = res.pagination.limit;
+        this.count = res.pagination.total_pages;
         return res.data;
       }),
       catchError(err => {
@@ -111,16 +116,19 @@ export class ArtworkListComponent implements OnInit {
 
   prevPage() {
     this.page--;
+    this.filterForm.reset();
     this.getArtWorks();
   }
 
   nextPage() {
     this.page++;
+    this.filterForm.reset();
     this.getArtWorks();
   }
 
   goToPage(n: number) {
     this.page = n;
+    this.filterForm.reset();
     this.getArtWorks();
   }
 
