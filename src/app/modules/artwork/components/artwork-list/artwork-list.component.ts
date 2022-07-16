@@ -6,6 +6,7 @@ import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ArtworkService } from '../../services/artwork.service';
 import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwork';
 
+
 @Component({
   selector: 'app-artwork-list',
   templateUrl: './artwork-list.component.html',
@@ -16,14 +17,15 @@ export class ArtworkListComponent implements OnInit {
   artworks?: Observable<Artwork[]>;
   filteredArtwork?: Observable<Artwork[]>;
   sortOption: DropdownOption[] = [
-    {key: '', value: 'Recommendation'}, 
     {key: 'title', value: 'Name'}, 
     {key: 'artist_title', value: 'Artist'}, 
     {key: 'date_start', value: 'Date'}
   ]
   FilterArtworkOption: FilterArtworkOption[] = []
-  filterForm!:FormGroup;
-
+  filterForm = this.fb.group({
+    filterArtwork: [''],
+    sortArtwork: [''],
+  })
  
   imageUrl: string = '';
   count: number = 210;
@@ -36,12 +38,8 @@ export class ArtworkListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.filterForm= this.fb.group({
-      filterArtwork: '',
-      sortArtwork: ''
-    });
     this.getArtWorks();
-    this.filterAndSortArtwork();
+    this.filterAndSortArtwork();   
   }
 
   get form() {
@@ -57,11 +55,11 @@ export class ArtworkListComponent implements OnInit {
   }
 
   onChangeFilter() {
-    console.log('change filter', this.form)
+    console.log('change filter',  this.form['filterArtwork'].value)
   }
 
   onChangeSorting() {
-    console.log('change sorting', this.form)
+    console.log('change sorting', this.form['sortArtwork'].value);
   }
 
   getArtWorks() {
@@ -71,7 +69,7 @@ export class ArtworkListComponent implements OnInit {
     this.artworks = this.artWorkService.getArtWorks(params).pipe(
       map(res => {
         this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
-        console.log('filterOption', this.FilterArtworkOption)
+        //console.log('filterOption', this.FilterArtworkOption)
         this.imageUrl = res.config.iiif_url;
         this.page = res.pagination.current_page;
         this.perPage = res.pagination.limit;
@@ -86,26 +84,22 @@ export class ArtworkListComponent implements OnInit {
 
   filterArtworkOptionData(data: Artwork[]): FilterArtworkOption[] {
     const filterArr: FilterArtworkOption[] = []
+    
     data.forEach((data: Artwork) => {
-      // length = data.filter(function(item){
-      //   return item.style_titles;
-      // }).length;
-
       if (data.style_titles) {
         data.style_titles.forEach((val: string) => {
           const index = filterArr.findIndex(x => x.title == val)
-          if(index > 1){
-            filterArr[index].count++;
-          }
-          else{
+          if(index == -1){
             filterArr.push({
               count: 1, 
               title: val
             })
           }
+          else{
+            filterArr[index].count++;
+          }
         }) 
       }
-
     })
     return filterArr;
   }
@@ -116,19 +110,19 @@ export class ArtworkListComponent implements OnInit {
 
   prevPage() {
     this.page--;
-    this.filterForm.reset();
+    this.form['filterArtwork'].reset();
     this.getArtWorks();
   }
 
   nextPage() {
     this.page++;
-    this.filterForm.reset();
+    this.form['filterArtwork'].reset();
     this.getArtWorks();
   }
 
   goToPage(n: number) {
     this.page = n;
-    this.filterForm.reset();
+    this.form['filterArtwork'].reset();
     this.getArtWorks();
   }
 

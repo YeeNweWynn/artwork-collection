@@ -11,17 +11,21 @@
                 [selectLabel]="selectLabel"
                 [selectValue]="selectValue"
                 formControlName="filterArtwork"
-                (selectionChange)="onChangeFilter()"
+                (click)="onChangeFilter()"
             ></nx-multi-select>
           </nx-formfield>
         </div>
         <div nxCol="12, 12, 6">
           <nx-formfield nxLabel="Sort By:">
             <nx-dropdown formControlName="sortArtwork" >
+                <nx-dropdown-item
+                  nxValue=""
+                  (click)="onChangeSorting()"
+                >Recommendation</nx-dropdown-item>
                 <nx-dropdown-item 
                   *ngFor="let sort of sortOption"
-                  nxValue="{{sort.value}}"
-                  (selectionChange)="onChangeSorting()">
+                  nxValue="{{sort.key}}"
+                  (click)="onChangeSorting()">{{sort.value}}
                 </nx-dropdown-item>
             </nx-dropdown>
          </nx-formfield>
