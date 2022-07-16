@@ -1,4 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/cdk/overlay-prebuilt.css';
+
 body {
     background: #0f2a3d;
 }
+// .cdk-overlay-container{
+//     z-index:999; //lower then fixed header z-index so it goes behind it
+// }

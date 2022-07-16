@@ -1,4 +1,4 @@
-<div *ngIf="loading">  
+<div *ngIf="(artworks | async); else loading">  
   <form [formGroup]="filterForm"  >
     <div nxLayout="grid" class="nx-margin-y-m">
       <div nxRow>
@@ -32,7 +32,7 @@
 
   <div nxLayout="grid" class="nx-margin-y-m">  
       <div nxRow >    
-          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks | async;">
+          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks | async">
               <nx-card class="nx-margin-y-s">
                 <figure nxFigure>       
                   <img 
@@ -64,7 +64,7 @@
           </div>        
       </div>
   </div>
-</div>
+  </div>
   <div nxLayout="grid" class="nx-margin-y-m">
     <div nxRow>
       <div nxCol="4" nxColOffset="4">

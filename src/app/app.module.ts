@@ -6,6 +6,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { NxExpertModule } from '@aposin/ng-aquila/config';
 
+
 @NgModule({
   declarations: [
     AppComponent
