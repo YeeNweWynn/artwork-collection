@@ -1,9 +1,10 @@
-<div class="wrapper" *ngIf="loading">  
-  <form [formGroup]="filterForm" class="nx-margin-y-m">
-    <div nxLayout="grid">
+<div *ngIf="loading">  
+  <form [formGroup]="filterForm"  >
+    <div nxLayout="grid" class="nx-margin-y-m">
       <div nxRow>
         <div nxCol="12, 12, 6">
           <nx-formfield nxLabel="Filter:">
+
             <nx-multi-select
                 placeholder="Style"
                 [options]="FilterArtworkOption"
@@ -36,7 +37,7 @@
                   <img 
                     *ngIf="artwork.image_id; else showPlaceHolder"
                     class="image" 
-                    src="assets/logos/Art_Institute_of_Chicago_logo.svg" 
+                    [src]="imageUrl+ '/' + artwork.image_id + '/full/843,/0/default.jpg'"
                     [title]="artwork.title"
                     [alt]="artwork.title" />
                     <ng-template #showPlaceHolder>
@@ -61,7 +62,24 @@
               </nx-card>
           </div>        
       </div>
-  </div>    
+  </div>
+  
+  <div nxLayout="grid" class="nx-margin-y-m align-center">
+    <div nxRow>
+      <div nxCol="4" nxColOffset="4">
+        <nx-pagination
+          [nxCount]="count"
+          [nxPage]="page"
+          [nxPerPage]="perPage"
+          nxType="advanced"
+          (nxGoPrev)="prevPage()"
+          (nxGoNext)="nextPage()"
+          (nxGoPage)="goToPage($event)"
+        >
+        </nx-pagination>
+      </div>
+    </div>
+  </div>
 </div>
   
 <ng-template #loading>

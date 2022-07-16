@@ -5,10 +5,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NxSpinnerModule } from '@aposin/ng-aquila/spinner';
 import { NxGridModule } from '@aposin/ng-aquila/grid';
-
+import { NxImageModule } from '@aposin/ng-aquila/image';
 import { NxCardModule } from '@aposin/ng-aquila/card';
 import { NxFormfieldModule } from '@aposin/ng-aquila/formfield';
 import { NxDropdownModule } from '@aposin/ng-aquila/dropdown';
+import { NxDataDisplayModule } from '@aposin/ng-aquila/data-display';
+import { NxPaginationModule } from '@aposin/ng-aquila/pagination';
 
 
 import { ArtworkRoutingModule } from './artwork-routing.module';
@@ -31,7 +33,10 @@ import { ArtworkWrapperComponent } from './components/artwork-wrapper/artwork-wr
     NxGridModule,
     NxCardModule,
     NxFormfieldModule,
-    NxDropdownModule
+    NxDropdownModule,
+    NxImageModule,
+    NxDataDisplayModule,
+    NxPaginationModule
   ]
 })
 export class ArtworkModule { }

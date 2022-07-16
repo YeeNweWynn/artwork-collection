@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'https://api.artic.edu/api/v1/artworks'
+  url: 'https://api.artic.edu/api/v1'
 };
 
 /*

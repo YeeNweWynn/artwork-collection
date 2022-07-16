@@ -27,7 +27,8 @@ export class ArtworkListComponent implements OnInit {
     filterArtwork: '',
     sortArtwork: ''
   });
-
+  imageUrl: string = '';
+  count: number = 210;
   page: number = 1;
   perPage: number = 8;
 
@@ -68,14 +69,14 @@ export class ArtworkListComponent implements OnInit {
     this.artworks = this.artWorkService.getArtWorks(params).pipe(
       map(res => {
         this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
+        console.log('filterOption', this.FilterArtworkOption)
+        this.imageUrl = res.config.iiif_url;
         return res.data;
       }),
       catchError(err => {
         return of ([]);
       })
     )
-
-    console.log('data', this.artworks);
   }
 
   filterArtworkOptionData(data: Artwork[]): FilterArtworkOption[] {
@@ -101,12 +102,26 @@ export class ArtworkListComponent implements OnInit {
       }
 
     })
-    console.log('filterArr', filterArr)
     return filterArr;
   }
 
   filterAndSortArtwork() {
    
+  }
+
+  prevPage() {
+    this.page--;
+    this.getArtWorks();
+  }
+
+  nextPage() {
+    this.page++;
+    this.getArtWorks();
+  }
+
+  goToPage(n: number) {
+    this.page = n;
+    this.getArtWorks();
   }
 
 }
