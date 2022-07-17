@@ -8,7 +8,7 @@
           <nx-formfield nxLabel="Filter:">
             <nx-multi-select
                 placeholder="Style"
-                [options]="FilterArtworkOption"
+                [options]="filterArtworkOption"
                 [selectLabel]="selectLabel"
                 [selectValue]="selectValue"
                 formControlName="filterArtwork"
@@ -35,7 +35,7 @@
   <!-- list view -->
   <div nxLayout="grid" class="nx-margin-y-m">  
       <div nxRow >    
-          <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks">
+          <div nxCol="12, 6, 3" *ngFor="let artwork of artworks">
               <nx-card class="nx-margin-y-s">
                 <figure nxFigure>       
                   <img 

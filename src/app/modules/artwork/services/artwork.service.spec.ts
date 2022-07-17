@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpRequest } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
-
+import { ArtWorkFilter } from '../models/artwork';
 import { ArtworkService } from './artwork.service';
 
 describe('ArtworkService', () => {
@@ -167,7 +167,7 @@ describe('ArtworkService', () => {
       let responseMsg;
 
       //when
-      service.getArtWorks('aa','aa').subscribe(res => {
+      service.getArtWorks('aa',ArtWorkFilter.date).subscribe(res => {
         responseMsg = res;
       });
 

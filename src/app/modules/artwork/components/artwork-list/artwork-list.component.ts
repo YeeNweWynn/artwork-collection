@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs'
 import { FormBuilder } from "@angular/forms";
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { ArtworkService } from '../../services/artwork.service';
-import { IArtwork, IDropdownOption, IFilterArtworkOption } from '../../models/artwork';
+import { 
+  IArtwork, 
+  IDropdownOption, 
+  IFilterArtworkOption,
+  ArtWorkFilter,
+  Pagination,
+} from '../../models/artwork';
 
 @Component({
   selector: 'app-artwork-list',
@@ -14,12 +20,12 @@ export class ArtworkListComponent implements OnInit {
   artworks: IArtwork[] = [];
   tempArtworks: IArtwork[] = [];
   sortOption: IDropdownOption[] = [
-    {key: '', value: 'Recommendation' },
-    {key: 'title', value: 'Name'}, 
-    {key: 'artist_title', value: 'Artist'}, 
-    {key: 'date_start', value: 'Date'}
+    { key: ArtWorkFilter.recommendation, value: 'Recommendation' },
+    { key: ArtWorkFilter.title, value: 'Name' },
+    { key: ArtWorkFilter.artist_title, value: 'Artist' },
+    { key: ArtWorkFilter.date, value: 'Date' },
   ]
-  FilterArtworkOption: IFilterArtworkOption[] = []
+  filterArtworkOption: IFilterArtworkOption[] = []
   filterForm = this.fb.group({
     filterArtwork: [''],
     sortArtwork: [''],
@@ -27,9 +33,9 @@ export class ArtworkListComponent implements OnInit {
  
   isLoading:boolean = false;
   imageUrl: string = '';
-  count: number = 0;
-  page: number = 1;
-  perPage: number = 8;
+  count = Pagination.count;
+  page = Pagination.page;
+  perPage = Pagination.perPage;
 
   constructor(
     private artWorkService: ArtworkService,
@@ -70,6 +76,7 @@ export class ArtworkListComponent implements OnInit {
 
   /** get artworks by sorting value*/
   onChangeSorting() {
+    /* reset pagination after sorting change */
     this.page = 1;
     this.perPage = 8;
     this.getArtWorks();
@@ -83,16 +90,24 @@ export class ArtworkListComponent implements OnInit {
     };
     this.isLoading = true;
     const sortBy = this.form['sortArtwork'].value;
-    this.artWorkService.getArtWorks(params, sortBy).subscribe((res: any) => {
-      this.isLoading = false;
-      this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
-      this.imageUrl = res.config.iiif_url;
-      this.page = res.pagination.current_page;
-      this.perPage = res.pagination.limit;
-      this.count = res.pagination.total_pages;
-      this.artworks = res.data;
-      this.tempArtworks = res.data;
-    });
+    this.artWorkService.getArtWorks(params, sortBy).subscribe(
+      (res: any) => {
+        this.isLoading = false;
+        this.filterArtworkOption = this.filterArtworkOptionData(res.data);
+        this.imageUrl = res.config.iiif_url;
+        this.page = res.pagination.current_page;
+        this.perPage = res.pagination.limit;
+        this.count = res.pagination.total_pages;
+        this.artworks = res.data;
+        this.tempArtworks = res.data;
+      },
+      (err: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.artworks = [];
+        this.tempArtworks = [];
+        this.filterArtworkOption = [];
+      }
+    );
   }
 
   /**Gather style_titles and set count */
@@ -117,22 +132,24 @@ export class ArtworkListComponent implements OnInit {
     return filterArr;
   }
 
-  prevPage() {
-    this.page--;
+  private changePage() {
     this.form['filterArtwork'].reset();
     this.getArtWorks();
+  }
+  
+  prevPage() {
+    this.page--;
+    this.changePage();
   }
 
   nextPage() {
     this.page++;
-    this.form['filterArtwork'].reset();
-    this.getArtWorks();
+    this.changePage();
   }
 
   goToPage(n: number) {
     this.page = n;
-    this.form['filterArtwork'].reset();
-    this.getArtWorks();
+    this.changePage();
   }
 
 }

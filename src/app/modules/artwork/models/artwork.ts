@@ -18,5 +18,23 @@ export interface IDropdownOption {
 export interface IFilterArtworkOption {
     title: string;
     count: number;
-    
 }
+
+export enum ArtWorkFilter {
+    recommendation = '',
+    title = 'title',
+    artist_title = 'artist_title',
+    date = 'date_start',
+}
+
+export enum Pagination {
+    count = 0,
+    page = 1,
+    perPage = 8,
+}
+
+export type TSortKey =
+  | ArtWorkFilter.recommendation
+  | ArtWorkFilter.title
+  | ArtWorkFilter.artist_title
+  | ArtWorkFilter.date;
