@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { filter } from 'rxjs/operators';
 
 import { ArtworkService } from '../../services/artwork.service';
-import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwork';
+import { IArtwork, IDropdownOption, IFilterArtworkOption } from '../../models/artwork';
 
 
 @Component({
@@ -14,14 +14,15 @@ import { Artwork, DropdownOption, FilterArtworkOption } from '../../models/artwo
   styleUrls: ['./artwork-list.component.scss']
 })
 export class ArtworkListComponent implements OnInit {
-  artworks: Artwork[] = [];
-  tempArtworks: Artwork[] = [];
-  sortOption: DropdownOption[] = [
+  artworks: IArtwork[] = [];
+  tempArtworks: IArtwork[] = [];
+  sortOption: IDropdownOption[] = [
+    {key: '', value: 'Recommendation' },
     {key: 'title', value: 'Name'}, 
     {key: 'artist_title', value: 'Artist'}, 
     {key: 'date_start', value: 'Date'}
   ]
-  FilterArtworkOption: FilterArtworkOption[] = []
+  FilterArtworkOption: IFilterArtworkOption[] = []
   filterForm = this.fb.group({
     filterArtwork: [''],
     sortArtwork: [''],
@@ -47,11 +48,11 @@ export class ArtworkListComponent implements OnInit {
     return this.filterForm.controls;
   }
 
-  selectLabel(option: FilterArtworkOption): string {
+  selectLabel(option: IFilterArtworkOption): string {
     return `${option.title} (${option.count})`;
   }
 
-  selectValue(option: FilterArtworkOption): string {
+  selectValue(option: IFilterArtworkOption): string {
     return option.title;
   }
 
@@ -71,6 +72,9 @@ export class ArtworkListComponent implements OnInit {
 
   onChangeSorting(sortKey: string) {
     console.log('change sorting', sortKey);
+    this.page = 1;
+    this.perPage = 8;
+    this.getArtWorks();
   }
 
   getArtWorks() {
@@ -79,7 +83,10 @@ export class ArtworkListComponent implements OnInit {
       limit: this.perPage,
     };
     this.isLoading = true;
-    this.artWorkService.getArtWorks(params).subscribe((res: any) => {
+    const sortBy = this.form['sortArtwork'].value;
+    console.log('change sorting', sortBy);
+
+    this.artWorkService.getArtWorks(params, sortBy).subscribe((res: any) => {
       this.isLoading = false;
       this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
       //console.log('filterOption', this.FilterArtworkOption)
@@ -92,10 +99,10 @@ export class ArtworkListComponent implements OnInit {
     });
   }
 
-  filterArtworkOptionData(data: Artwork[]): FilterArtworkOption[] {
-    const filterArr: FilterArtworkOption[] = []
+  filterArtworkOptionData(data: IArtwork[]): IFilterArtworkOption[] {
+    const filterArr: IFilterArtworkOption[] = []
     
-    data.forEach((data: Artwork) => {
+    data.forEach((data: IArtwork) => {
       if (data.style_titles) {
         data.style_titles.forEach((val: string) => {
           const index = filterArr.findIndex(x => x.title == val)

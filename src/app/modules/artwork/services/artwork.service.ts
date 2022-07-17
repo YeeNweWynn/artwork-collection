@@ -7,12 +7,13 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ArtworkService {
-
-  BASE_URL = environment.url;
+  fields = 'fields=id,title,artist_title,image_id,date_start,date_end,place_of_origin,medium_display,style_titles';
+  BASE_URL = `${environment.url}/artworks/search?${this.fields}`;
 
   constructor( private httpClient: HttpClient) { }
 
-  getArtWorks(params: any): Observable<any> {
-    return this.httpClient.get(`${ this.BASE_URL }/artworks`,{ params })
+  getArtWorks(params: any, sortKey: string): any {
+    const sortQuery = sortKey ? `&sort[${sortKey}][order]=desc` : '';
+    return this.httpClient.get(this.BASE_URL + sortQuery, { params });
   }
 }

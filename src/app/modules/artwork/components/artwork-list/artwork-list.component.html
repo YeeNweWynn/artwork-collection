@@ -4,7 +4,6 @@
       <div nxRow>
         <div nxCol="12, 12, 6">
           <nx-formfield nxLabel="Filter:">
-
             <nx-multi-select
                 placeholder="Style"
                 [options]="FilterArtworkOption"
@@ -17,10 +16,6 @@
         <div nxCol="12, 12, 6">
           <nx-formfield nxLabel="Sort By:">
             <nx-dropdown formControlName="sortArtwork" >
-                <nx-dropdown-item
-                  nxValue=""
-                  (click)="onChangeSorting('')"
-                >Recommendation</nx-dropdown-item>
                 <nx-dropdown-item 
                   *ngFor="let sort of sortOption"
                   nxValue="{{sort.key}}"
@@ -52,7 +47,6 @@
                         alt="Art_Institute_of_Chicago_logo" />
                     </ng-template>   
                   </figure>
-
                   <h3>{{artwork.title}}</h3>
                   <h4>{{artwork.artist_title}}</h4>
                   <p *ngIf="!artwork.date_start && !artwork.date_end; else showDate">{{artwork.place_of_origin}}</p>
@@ -66,7 +60,7 @@
               </nx-card>
           </div>        
       </div>
-  </div>
+    </div>
   </div>
   <div nxLayout="grid" class="nx-margin-y-m">
     <div nxRow>

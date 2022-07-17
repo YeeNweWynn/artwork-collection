@@ -1,4 +1,4 @@
-export interface Artwork {
+export interface IArtwork {
     style_titles: string[];
     id: number;
     image_id: string;
@@ -10,12 +10,12 @@ export interface Artwork {
     date_end: number;
 }
 
-export interface DropdownOption {
+export interface IDropdownOption {
     key: string;
     value: string;
 }
 
-export interface FilterArtworkOption {
+export interface IFilterArtworkOption {
     title: string;
     count: number;
     
