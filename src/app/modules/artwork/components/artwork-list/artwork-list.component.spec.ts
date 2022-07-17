@@ -1,7 +1,6 @@
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of as observableOf } from 'rxjs';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ArtworkService } from '../../services/artwork.service';
 
 import { ArtworkListComponent } from './artwork-list.component';
@@ -14,7 +13,6 @@ describe('ArtworkListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ArtworkListComponent ],
-      // imports: [ReactiveFormsModule, FormsModule],
       providers:[
         {
           provide: ArtworkService,

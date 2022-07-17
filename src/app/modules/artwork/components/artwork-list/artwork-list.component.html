@@ -2,6 +2,8 @@
   <form [formGroup]="filterForm"  >
     <div nxLayout="grid" class="nx-margin-y-m">
       <div nxRow>
+
+        <!-- filter dropdown -->
         <div nxCol="12, 12, 6">
           <nx-formfield nxLabel="Filter:">
             <nx-multi-select
@@ -13,13 +15,15 @@
             ></nx-multi-select>
           </nx-formfield>
         </div>
+
+        <!-- sorting dropdown -->
         <div nxCol="12, 12, 6">
           <nx-formfield nxLabel="Sort By:">
             <nx-dropdown formControlName="sortArtwork" >
                 <nx-dropdown-item 
                   *ngFor="let sort of sortOption"
                   nxValue="{{sort.key}}"
-                  (click)="onChangeSorting(sort.value)">{{sort.value}}
+                  (click)="onChangeSorting()">{{sort.value}}
                 </nx-dropdown-item>
             </nx-dropdown>
          </nx-formfield>
@@ -28,6 +32,7 @@
     </div>
   </form>
 
+  <!-- list view -->
   <div nxLayout="grid" class="nx-margin-y-m">  
       <div nxRow >    
           <div nxCol="12,12,6,4,3" *ngFor="let artwork of artworks">
@@ -60,25 +65,28 @@
               </nx-card>
           </div>        
       </div>
+  </div>
+</div>
+
+<!-- Pagination view -->
+<div nxLayout="grid" class="nx-margin-y-m">
+  <div nxRow>
+    <div nxCol="4" nxColOffset="4">
+      <nx-pagination
+        [nxCount]="count"
+        [nxPage]="page"
+        [nxPerPage]="perPage"
+        nxType="advanced"
+        (nxGoPrev)="prevPage()"
+        (nxGoNext)="nextPage()"
+        (nxGoPage)="goToPage($event)"
+      >
+      </nx-pagination>
     </div>
   </div>
-  <div nxLayout="grid" class="nx-margin-y-m">
-    <div nxRow>
-      <div nxCol="4" nxColOffset="4">
-        <nx-pagination
-          [nxCount]="count"
-          [nxPage]="page"
-          [nxPerPage]="perPage"
-          nxType="advanced"
-          (nxGoPrev)="prevPage()"
-          (nxGoNext)="nextPage()"
-          (nxGoPage)="goToPage($event)"
-        >
-        </nx-pagination>
-      </div>
-    </div>
-  </div>
+</div>
   
+<!-- Loading -->
 <ng-template #loading>
   <div nxLayout="grid" class="nx-margin-y-m">
     <div nxRow>

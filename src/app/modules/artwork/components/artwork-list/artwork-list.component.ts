@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs'
-import { HttpParams } from '@angular/common/http';
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { filter } from 'rxjs/operators';
+import { FormBuilder } from "@angular/forms";
 
 import { ArtworkService } from '../../services/artwork.service';
 import { IArtwork, IDropdownOption, IFilterArtworkOption } from '../../models/artwork';
-
 
 @Component({
   selector: 'app-artwork-list',
@@ -30,7 +27,7 @@ export class ArtworkListComponent implements OnInit {
  
   isLoading:boolean = false;
   imageUrl: string = '';
-  count: number = 210;
+  count: number = 0;
   page: number = 1;
   perPage: number = 8;
 
@@ -56,6 +53,7 @@ export class ArtworkListComponent implements OnInit {
     return option.title;
   }
 
+  /** get artworks by filtered value  */
   onFilterChangesListner(): void {
     this.form['filterArtwork'].valueChanges.subscribe((filterArr) => {
       if (filterArr.length) {
@@ -70,13 +68,14 @@ export class ArtworkListComponent implements OnInit {
     });
   }
 
-  onChangeSorting(sortKey: string) {
-    console.log('change sorting', sortKey);
+  /** get artworks by sorting value*/
+  onChangeSorting() {
     this.page = 1;
     this.perPage = 8;
     this.getArtWorks();
   }
 
+  /** get artworks list with query params and pagination*/
   getArtWorks() {
     const params = {
       page: this.page,
@@ -84,12 +83,9 @@ export class ArtworkListComponent implements OnInit {
     };
     this.isLoading = true;
     const sortBy = this.form['sortArtwork'].value;
-    console.log('change sorting', sortBy);
-
     this.artWorkService.getArtWorks(params, sortBy).subscribe((res: any) => {
       this.isLoading = false;
       this.FilterArtworkOption = this.filterArtworkOptionData(res.data);
-      //console.log('filterOption', this.FilterArtworkOption)
       this.imageUrl = res.config.iiif_url;
       this.page = res.pagination.current_page;
       this.perPage = res.pagination.limit;
@@ -99,9 +95,9 @@ export class ArtworkListComponent implements OnInit {
     });
   }
 
+  /**Gather style_titles and set count */
   filterArtworkOptionData(data: IArtwork[]): IFilterArtworkOption[] {
-    const filterArr: IFilterArtworkOption[] = []
-    
+    const filterArr: IFilterArtworkOption[] = [];
     data.forEach((data: IArtwork) => {
       if (data.style_titles) {
         data.style_titles.forEach((val: string) => {
