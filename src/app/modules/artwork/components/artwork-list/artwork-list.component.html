@@ -66,26 +66,25 @@
           </div>        
       </div>
   </div>
-</div>
-
-<!-- Pagination view -->
-<div nxLayout="grid" class="nx-margin-y-m">
-  <div nxRow>
-    <div nxCol="4" nxColOffset="4">
-      <nx-pagination
-        [nxCount]="count"
-        [nxPage]="page"
-        [nxPerPage]="perPage"
-        nxType="advanced"
-        (nxGoPrev)="prevPage()"
-        (nxGoNext)="nextPage()"
-        (nxGoPage)="goToPage($event)"
-      >
-      </nx-pagination>
+  
+  <!-- Pagination view -->
+  <div nxLayout="grid" class="nx-margin-y-m">
+    <div nxRow>
+      <div nxCol="4" nxColOffset="4">
+        <nx-pagination
+          [nxCount]="count"
+          [nxPage]="page"
+          [nxPerPage]="perPage"
+          nxType="advanced"
+          (nxGoPrev)="prevPage()"
+          (nxGoNext)="nextPage()"
+          (nxGoPage)="goToPage($event)"
+        >
+        </nx-pagination>
+      </div>
     </div>
   </div>
 </div>
-  
 <!-- Loading -->
 <ng-template #loading>
   <div nxLayout="grid" class="nx-margin-y-m">

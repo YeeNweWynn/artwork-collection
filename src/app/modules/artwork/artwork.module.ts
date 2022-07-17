@@ -9,8 +9,8 @@ import { NxImageModule } from '@aposin/ng-aquila/image';
 import { NxCardModule } from '@aposin/ng-aquila/card';
 import { NxFormfieldModule } from '@aposin/ng-aquila/formfield';
 import { NxDropdownModule } from '@aposin/ng-aquila/dropdown';
-import { NxDataDisplayModule } from '@aposin/ng-aquila/data-display';
 import { NxPaginationModule } from '@aposin/ng-aquila/pagination';
+
 
 import { ArtworkRoutingModule } from './artwork-routing.module';
 import { ArtworkListComponent } from './components/artwork-list/artwork-list.component';
@@ -34,7 +34,6 @@ import { ArtworkWrapperComponent } from './components/artwork-wrapper/artwork-wr
     NxFormfieldModule,
     NxDropdownModule,
     NxImageModule,
-    NxDataDisplayModule,
     NxPaginationModule
   ]
 })
